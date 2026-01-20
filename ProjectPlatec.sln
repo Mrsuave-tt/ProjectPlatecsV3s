@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.36105.23 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectPlatec", "ProjectPlatec\ProjectPlatec.csproj", "{1146B6D7-3EDE-4466-B0BC-55B966D6053F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1146B6D7-3EDE-4466-B0BC-55B966D6053F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1146B6D7-3EDE-4466-B0BC-55B966D6053F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1146B6D7-3EDE-4466-B0BC-55B966D6053F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1146B6D7-3EDE-4466-B0BC-55B966D6053F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9EE3F411-5756-4FE2-B99F-BF0C26B35877}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,142 @@
+@{
+    ViewData["Title"] = "Student Dashboard";
+    var student = ViewBag.Student as ProjectPlatec.Models.Student;
+    var todayAttendance = ViewBag.TodayAttendance as ProjectPlatec.Models.Attendance;
+    var recentAttendance = ViewBag.RecentAttendance as List<ProjectPlatec.Models.Attendance>;
+    var totalPresent = ViewBag.TotalPresent as int? ?? 0;
+    var totalAbsent = ViewBag.TotalAbsent as int? ?? 0;
+    var totalLate = ViewBag.TotalLate as int? ?? 0;
+}
+
+@if (student != null)
+{
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Welcome, @student.FirstName!</h2>
+        <a asp-controller="StudentAccount" asp-action="Profile" class="btn btn-outline-primary">My Profile</a>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <h5 class="card-title">Present</h5>
+                    <h2>@totalPresent</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-danger">
+                <div class="card-body">
+                    <h5 class="card-title">Absent</h5>
+                    <h2>@totalAbsent</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-warning">
+                <div class="card-body">
+                    <h5 class="card-title">Late</h5>
+                    <h2>@totalLate</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-info">
+                <div class="card-body">
+                    <h5 class="card-title">Today's Status</h5>
+                    @if (todayAttendance != null)
+                    {
+                        @if (todayAttendance.Status == ProjectPlatec.Models.AttendanceStatus.Present)
+                        {
+                            <h2><span class="badge bg-success">Present</span></h2>
+                        }
+                        else if (todayAttendance.Status == ProjectPlatec.Models.AttendanceStatus.Absent)
+                        {
+                            <h2><span class="badge bg-danger">Absent</span></h2>
+                        }
+                        else
+                        {
+                            <h2><span class="badge bg-warning">Late</span></h2>
+                        }
+                    }
+                    else
+                    {
+                        <h2><span class="badge bg-secondary">Not Marked</span></h2>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Recent Attendance</h5>
+                    <a asp-action="MyAttendance" class="btn btn-sm btn-primary">View All</a>
+                </div>
+                <div class="card-body">
+                    @if (recentAttendance != null && recentAttendance.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in recentAttendance)
+                                    {
+                                        <tr>
+                                            <td>@item.Date.ToString("MM/dd/yyyy")</td>
+                                            <td>
+                                                @if (item.Status == ProjectPlatec.Models.AttendanceStatus.Present)
+                                                {
+                                                    <span class="badge bg-success">Present</span>
+                                                }
+                                                else if (item.Status == ProjectPlatec.Models.AttendanceStatus.Absent)
+                                                {
+                                                    <span class="badge bg-danger">Absent</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-warning">Late</span>
+                                                }
+                                            </td>
+                                            <td>@(item.Remarks ?? "N/A")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No attendance records found.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Quick Actions</h5>
+                    <div class="d-grid gap-2">
+                        <a asp-action="MyAttendance" class="btn btn-primary">View My Attendance</a>
+                        <a asp-controller="StudentAccount" asp-action="ChangePassword" class="btn btn-warning">Change Password</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+    </script>
+}
+

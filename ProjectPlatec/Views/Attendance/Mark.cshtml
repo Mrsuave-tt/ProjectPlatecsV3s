@@ -1,0 +1,88 @@
+@model ProjectPlatec.Models.MarkAttendanceViewModel
+@using ProjectPlatec.Models
+@{
+    ViewData["Title"] = "Mark Attendance";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Mark Attendance</h2>
+    <a asp-action="View" asp-route-date="@Model.Date" class="btn btn-info">View Today's Attendance</a>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<form asp-action="Mark" method="post">
+    <div class="card shadow mb-3">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <label asp-for="Date" class="form-label"></label>
+                    <input asp-for="Date" class="form-control" type="date" />
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
+                <div class="col-md-8 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary me-2">Save Attendance</button>
+                    <a asp-action="Mark" asp-route-date="@DateTime.Today" class="btn btn-secondary">Today</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body">
+            @if (Model.Students.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Student ID</th>
+                                <th>Name</th>
+                                <th>Status</th>
+                                <th>Remarks</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.Students.Count; i++)
+                            {
+                                <tr>
+                                    <td>@Model.Students[i].StudentIdNumber</td>
+                                    <td>@Model.Students[i].StudentName</td>
+                                    <td>
+                                        <input type="hidden" asp-for="Students[i].StudentId" />
+                                        <input type="hidden" asp-for="Students[i].Date" />
+                                        <select asp-for="Students[i].Status" class="form-select">
+                                            <option value="@AttendanceStatus.Present">Present</option>
+                                            <option value="@AttendanceStatus.Absent">Absent</option>
+                                            <option value="@AttendanceStatus.Late">Late</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input asp-for="Students[i].Remarks" class="form-control" placeholder="Optional remarks" />
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <p class="text-muted">No students found. <a asp-controller="Student" asp-action="Create">Add students first</a></p>
+                </div>
+            }
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

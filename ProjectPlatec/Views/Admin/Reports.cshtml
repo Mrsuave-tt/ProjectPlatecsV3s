@@ -1,0 +1,103 @@
+@model ProjectPlatec.Models.AttendanceReportViewModel
+@{
+    ViewData["Title"] = "Attendance Reports";
+}
+
+<h2>Attendance Reports</h2>
+<hr />
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <form asp-action="Reports" method="get" class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label">Report Type</label>
+                <select name="reportType" class="form-select" onchange="this.form.submit()">
+                    <option value="Daily" selected="@(Model.ReportType == "Daily")">Daily</option>
+                    <option value="Weekly" selected="@(Model.ReportType == "Weekly")">Weekly</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Start Date</label>
+                <input type="date" name="startDate" class="form-control" value="@Model.StartDate.ToString("yyyy-MM-dd")" />
+            </div>
+            @if (Model.ReportType == "Weekly")
+            {
+                <div class="col-md-3">
+                    <label class="form-label">End Date</label>
+                    <input type="date" name="endDate" class="form-control" value="@Model.EndDate.ToString("yyyy-MM-dd")" />
+                </div>
+            }
+            <div class="col-md-3 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary">Generate Report</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (Model.ReportItems.Any())
+{
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <h5 class="card-title">Total Present</h5>
+                    <h2>@Model.TotalPresent</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-danger">
+                <div class="card-body">
+                    <h5 class="card-title">Total Absent</h5>
+                    <h2>@Model.TotalAbsent</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-warning">
+                <div class="card-body">
+                    <h5 class="card-title">Total Late</h5>
+                    <h2>@Model.TotalLate</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Present</th>
+                            <th>Absent</th>
+                            <th>Late</th>
+                            <th>Total Students</th>
+                            <th>Present %</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.ReportItems)
+                        {
+                            <tr>
+                                <td>@item.Date.ToString("MM/dd/yyyy")</td>
+                                <td><span class="badge bg-success">@item.PresentCount</span></td>
+                                <td><span class="badge bg-danger">@item.AbsentCount</span></td>
+                                <td><span class="badge bg-warning">@item.LateCount</span></td>
+                                <td>@item.TotalStudents</td>
+                                <td>@item.PresentPercentage.ToString("F2")%</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-info">
+        No attendance data found for the selected period.
+    </div>
+}

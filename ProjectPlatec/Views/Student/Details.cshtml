@@ -1,0 +1,49 @@
+@model ProjectPlatec.Models.Student
+@{
+    ViewData["Title"] = "Student Details";
+}
+
+<h2>Student Details</h2>
+<hr />
+
+<dl class="row">
+    <dt class="col-sm-3">Student ID:</dt>
+    <dd class="col-sm-9">@Model.StudentId</dd>
+
+    <dt class="col-sm-3">First Name:</dt>
+    <dd class="col-sm-9">@Model.FirstName</dd>
+
+    <dt class="col-sm-3">Last Name:</dt>
+    <dd class="col-sm-9">@Model.LastName</dd>
+
+    <dt class="col-sm-3">Email:</dt>
+    <dd class="col-sm-9">@Model.Email</dd>
+
+    <dt class="col-sm-3">Phone Number:</dt>
+    <dd class="col-sm-9">@(Model.PhoneNumber ?? "N/A")</dd>
+
+    <dt class="col-sm-3">Date of Birth:</dt>
+    <dd class="col-sm-9">@(Model.DateOfBirth?.ToString("MM/dd/yyyy") ?? "N/A")</dd>
+
+    <dt class="col-sm-3">Created Date:</dt>
+    <dd class="col-sm-9">@Model.CreatedDate.ToString("MM/dd/yyyy HH:mm")</dd>
+
+    <dt class="col-sm-3">Account Status:</dt>
+    <dd class="col-sm-9">
+        @if (!string.IsNullOrEmpty(Model.UserId))
+        {
+            <span class="badge bg-success">Account Created</span>
+            <small class="text-muted ms-2">(Initial password: @Model.StudentId)</small>
+        }
+        else
+        {
+            <span class="badge bg-warning">No Account</span>
+        }
+    </dd>
+</dl>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
+

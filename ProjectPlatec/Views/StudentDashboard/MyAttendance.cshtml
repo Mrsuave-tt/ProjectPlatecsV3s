@@ -1,0 +1,125 @@
+@model IEnumerable<ProjectPlatec.Models.Attendance>
+@{
+    ViewData["Title"] = "My Attendance";
+    var student = ViewBag.Student as ProjectPlatec.Models.Student;
+    var startDate = ViewBag.StartDate as DateTime? ?? DateTime.Today.AddDays(-30);
+    var endDate = ViewBag.EndDate as DateTime? ?? DateTime.Today;
+}
+
+<!-- Mobile-Optimized Header -->
+<div class="d-flex justify-content-between align-items-center mb-3 mb-md-4">
+    <h2 class="h4 mb-0">My Attendance</h2>
+    <a asp-action="Index" class="btn btn-secondary btn-sm">Back</a>
+</div>
+
+@if (student != null)
+{
+    <!-- Mobile-Friendly Filter -->
+    <div class="card shadow mb-3 mb-md-4">
+        <div class="card-body p-2 p-md-3">
+            <form asp-action="MyAttendance" method="get" class="row g-2">
+                <div class="col-12 col-md-4">
+                    <label class="form-label small">Start Date</label>
+                    <input type="date" name="startDate" class="form-control" value="@startDate.ToString("yyyy-MM-dd")" />
+                </div>
+                <div class="col-12 col-md-4">
+                    <label class="form-label small">End Date</label>
+                    <input type="date" name="endDate" class="form-control" value="@endDate.ToString("yyyy-MM-dd")" />
+                </div>
+                <div class="col-12 col-md-4 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">Filter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Mobile-Friendly Attendance List -->
+    <div class="card shadow">
+        <div class="card-body p-2 p-md-3">
+            @if (Model.Any())
+            {
+                <!-- Mobile: Card View -->
+                <div class="d-md-none">
+                    @foreach (var item in Model)
+                    {
+                        <div class="card mb-2">
+                            <div class="card-body p-2">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <strong>@item.Date.ToString("MM/dd/yyyy")</strong>
+                                        <br />
+                                        <small class="text-muted">@item.MarkedAt.ToString("MM/dd/yyyy HH:mm")</small>
+                                    </div>
+                                    <div>
+                                        @if (item.Status == ProjectPlatec.Models.AttendanceStatus.Present)
+                                        {
+                                            <span class="badge bg-success">Present</span>
+                                        }
+                                        else if (item.Status == ProjectPlatec.Models.AttendanceStatus.Absent)
+                                        {
+                                            <span class="badge bg-danger">Absent</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning">Late</span>
+                                        }
+                                    </div>
+                                </div>
+                                @if (!string.IsNullOrEmpty(item.Remarks))
+                                {
+                                    <div class="mt-2">
+                                        <small><strong>Remarks:</strong> @item.Remarks</small>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+                <!-- Desktop: Table View -->
+                <div class="d-none d-md-block">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Remarks</th>
+                                    <th>Marked At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.Date.ToString("MM/dd/yyyy")</td>
+                                        <td>
+                                            @if (item.Status == ProjectPlatec.Models.AttendanceStatus.Present)
+                                            {
+                                                <span class="badge bg-success">Present</span>
+                                            }
+                                            else if (item.Status == ProjectPlatec.Models.AttendanceStatus.Absent)
+                                            {
+                                                <span class="badge bg-danger">Absent</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-warning">Late</span>
+                                            }
+                                        </td>
+                                        <td>@(item.Remarks ?? "N/A")</td>
+                                        <td>@item.MarkedAt.ToString("MM/dd/yyyy HH:mm")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <p class="text-muted text-center py-3">No attendance records found for the selected period.</p>
+            }
+        </div>
+    </div>
+}
+

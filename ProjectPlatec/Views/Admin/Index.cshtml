@@ -1,0 +1,113 @@
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    var totalStudents = ViewBag.TotalStudents as int? ?? 0;
+    var presentCount = ViewBag.PresentCount as int? ?? 0;
+    var absentCount = ViewBag.AbsentCount as int? ?? 0;
+    var lateCount = ViewBag.LateCount as int? ?? 0;
+    var notMarked = ViewBag.NotMarked as int? ?? 0;
+    var today = ViewBag.Today as DateTime? ?? DateTime.Today;
+}
+
+<h2>Admin Dashboard</h2>
+<hr />
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">Total Students</h5>
+                <h2>@totalStudents</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">Present</h5>
+                <h2>@presentCount</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-danger">
+            <div class="card-body">
+                <h5 class="card-title">Absent</h5>
+                <h2>@absentCount</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning">
+            <div class="card-body">
+                <h5 class="card-title">Late</h5>
+                <h2>@lateCount</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header">
+                <h5 class="mb-0">Today's Attendance (@today.ToString("MM/dd/yyyy"))</h5>
+            </div>
+            <div class="card-body">
+                @if (notMarked > 0)
+                {
+                    <div class="alert alert-warning">
+                        <strong>@notMarked</strong> student(s) attendance not marked yet.
+                        <a asp-controller="Attendance" asp-action="Mark" asp-route-date="@today" class="btn btn-sm btn-primary ms-2">Mark Now</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-success">
+                        All students' attendance has been marked for today.
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header">
+                <h5 class="mb-0">Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="/Attendance/Mark?date=@today.ToString("yyyy-MM-dd")" class="btn btn-primary">Mark Today's Attendance</a>
+                    <a href="/Student/Create" class="btn btn-success">Add New Student</a>
+                    <a href="/Teacher/Create" class="btn btn-info">Add New Teacher</a>
+                    <a href="/Admin/Reports" class="btn btn-secondary">View Reports</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header">
+                <h5 class="mb-0">Navigation</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <a href="/Student/Index">Manage Students</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="/Teacher/Index">Manage Teachers</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="/Attendance/Mark">Mark Attendance</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="/Admin/Reports">Attendance Reports</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

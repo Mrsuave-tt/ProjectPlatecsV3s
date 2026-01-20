@@ -1,0 +1,66 @@
+@model IEnumerable<ProjectPlatec.Models.Attendance>
+@{
+    ViewData["Title"] = "View Attendance";
+    var selectedDate = ViewBag.SelectedDate as DateTime? ?? DateTime.Today;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Attendance for @selectedDate.ToString("MM/dd/yyyy")</h2>
+    <a asp-action="Mark" asp-route-date="@selectedDate" class="btn btn-primary">Mark Attendance</a>
+</div>
+
+<div class="card shadow">
+    <div class="card-body">
+        @if (Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Student ID</th>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th>Remarks</th>
+                            <th>Marked By</th>
+                            <th>Marked At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Student.StudentId</td>
+                                <td>@item.Student.FullName</td>
+                                <td>
+                                    @if (item.Status == AttendanceStatus.Present)
+                                    {
+                                        <span class="badge bg-success">Present</span>
+                                    }
+                                    else if (item.Status == AttendanceStatus.Absent)
+                                    {
+                                        <span class="badge bg-danger">Absent</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning">Late</span>
+                                    }
+                                </td>
+                                <td>@(item.Remarks ?? "N/A")</td>
+                                <td>@(item.MarkedBy ?? "System")</td>
+                                <td>@item.MarkedAt.ToString("MM/dd/yyyy HH:mm")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+                <p class="text-muted">No attendance records found for this date.</p>
+                <a asp-action="Mark" asp-route-date="@selectedDate" class="btn btn-primary">Mark Attendance</a>
+            </div>
+        }
+    </div>
+</div>
+
